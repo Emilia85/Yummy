@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'poppins', serif;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            background-image: url(https://images.pexels.com/photos/5947024/pexels-photo-5947024.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500);
+            background-size: cover;
+            background-position: center;
+            padding: 0 8%;/*Delicate Logo + Courses + Login + Sign Up  S-au mutat mai in dreapta, dar au ramas tot in dreapta sus*/
+        }
+        nav{
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 20px 0;
+        }
+        .nav-links{
+            display: flex;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-links a{
+            text-decoration: none;
+            color: white;
+            margin-left: 40px;
+        }
+        .logo{
+        width:100px;
+        }
+        .logo img{
+            width:100px;
+        }
+
+        .lang-menu{
+            display: flex;
+            margin-top: -3px;
+            margin-left: -10px;
+            justify-content: center;
+            z-index: 1;
+        }
+        .selected-lang{
+            cursor: pointer;
+            display:inline-block;
+            justify-content: space-between;
+            line-height:2;
+            width: 100px;
+        }
+        .selected-lang:before{
+            content:'';
+            display:inline-block;
+            text-align:center; 
+            background-image: url(https://i.pinimg.com/originals/3b/c0/a4/3bc0a4a8e39bb561d24c0a9d7a7f0c07.png);
+            width: 40px;
+            height: 33px;
+        }
+        .lang-menu ul{
+            margin:0;
+            padding:0;
+            background-color:#fff;
+           width: 1px;/*Adaugand latimea, mi-a iesit doar o dunga in loc de o cutie la limba*/
+            border:1px solid #f8f8f8;
+            box-shadow:0px 1px 10px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            display: none;
+            position : absolute;
+            top: 40px;
+            left: 20;
+        }
+        .lang-menu ul li{
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+        }
+        .lang-menu ul li a{
+            width: 100px;
+            display:inline-block;
+            padding: 5px 10px;
+        }
+        .lang-menu ul li a:before{
+            content:'';
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            margin-right:10px;
+            vertical-align: middle;
+        }
+        .lang-menu ul li a:hover{
+            background-color:black;
+            width: 77px;
+        }
+        .de:before{
+            background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Germany-icon.png);
+        }
+        .us:before{
+            background-image: url(https://icons.iconarchive.com/icons/icons-land/vista-flags/32/United-States-Flag-1-icon.png);
+        }
+        .fr:before{
+            background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/France-icon.png);
+        }
+        .it:before{
+            background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Italy-icon.png);
+        }
+        .ro:before{
+            background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Romania-icon.png);
+        }
+        .es:before{
+            background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Spain-icon.png);
+        }
+        .pt:before{
+            background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Portugal-icon.png);
+        }
+        .lang-menu:hover ul{
+            display: block;
+        }
+        .content{
+            margin-top: 550px;
+            color: white;
+            background-color: black;
+            opacity: 0.6;
+        }
+        .content #title{
+            font-size: 60px;
+            text-align: center;
+        }
+        
+        @media (max-width:700px){
+            .nav-links a{
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+
+            .content #title{
+            padding: 10px 10px 30px 10px;
+            font-size: 30px;
+            text-align: center;
+            }
+
+            .content{
+                margin-top: 535px;
+            }
+
+        }
+    </style>
+
+</head>
+<script>
+ var limba = "ro";
+		var x = document.getElementsByClassName("content");
+
+		function getLocation() {
+  					if (navigator.geolocation) {
+    					navigator.geolocation.getCurrentPosition(OnPositionRetrieved);
+  					} 
+		  			else { 
+    						x.innerHTML = "Geolocation is not supported by this browser.";
+  					}
+		}
+
+		function OnPositionRetrieved(position) {
+                                x = document.getElementsByClassName("content");
+  								x.innerHTML = "Latitude: " + position.coords.latitude + 
+								"<br>Longitude: " + position.coords.longitude;
+		}
+       
+
+	var txtCautare = document.getElementsByClassName("content");
+
+    window.onload = function Search() {
+    var locale = getLocaleLanguage();
+    var locales = [
+        { name: "English", value: "en" },
+        { name: "Deutsch", value: "de" },
+        { name: "Français<", value: "fr" },
+        { name: "Italiano<", value: "it" },
+        { name: "Romana<", value: "ro" },
+        { name: "Español<", value: "esp" },
+        { name: "Português<", value:"pt"}
+
+    ];
+    getLocation();//Aflu limba vorbita in functie de locatia unde ma aflu
+    }
+//Site-ul se va deschide automat in limba vorbita in    locul unde ma aflu
+    function getLocaleLanguage() {
+        var limba_preferata = navigator.language.substr(0, 2);
+
+        if (limba_preferata == "en") 
+                    English();
+            else if(limba_preferata == "de")
+                    German();
+            else if(limba_preferata == "fr")
+                    French();
+            else if(limba_preferata == "it")
+                    Italian();
+            else if(limba_preferata == "ro")
+                    Romana();
+            else if(limba_preferata == "esp")
+                    Spaniola();
+            else if(limba_preferata == "pt")
+                    Portugheza();
+            
+            else
+                    English();
+
+    } 
+    function English(){
+
+                document.getElementById("title").innerHTML = "Welcome to Yummy!<br>  You can order everything you want from our range of food and sweets. You can prepare your favorite drink by yourself, this is the reason why you will not find any drink on our menu. <br>We hope you enjoyed it and look forward to seeing you again!";
+
+                document.getElementById("photos").innerHTML = "&#9733; All rights on the photos are reserved to their authors (copyright)!";
+
+                limba = "en";
+    }
+    function Italian(){
+            
+                document.getElementById("title").innerHTML = "Benvenuto a Yummy!<br> Puoi ordinare tutto ciò che desideri dalla nostra gamma di cibi e dolci. &nbsp;La tua bevanda preferita la poi preparare da solo, motivo per cui non trovi bibite nel nostro menu. <br>Speriamo che ti sia piaciuto da noi e ci rivedremo presto!"; 
+
+                document.getElementById("photos").innerHTML = "&#9733; Tutti i diritti sulle foto sono riservati a i loro autori (copyright)!";
+
+                limba = "it";
+    }
+    function French(){
+
+                document.getElementById("title").innerHTML = "Bienvenue chez Yummy!<br> Vous pouvez commander tout ce que vous voulez parmi notre gamme d'aliments et de bonbons. &nbsp;Vous pouvez préparer votre propre boisson préférée, c'est la raison pourquoi vous ne trouverez aucune boisson dans notre carte. <br>Nous espérons que vous l'avez apprécié et nous espérons vous revoir bientôt!";
+
+                document.getElementById("photos").innerHTML = "&#9733; Tous les droits sur les photos sont réservés à leurs auteurs (copyright)! ";
+
+                limba = "fr";
+    }
+    function German(){
+                document.getElementById("title").innerHTML = "Willkommen bei Yummy!<br> Sie können aus unserem Angebot an Speisen und Süßigkeiten alles bestellen, was Sie möchten. &nbsp;Sie können Ihr eigenes Getränk selbst zubereiten, weshalb Sie auf unserer Speisekarte keine Getränke finden. <br>Wir hoffen, es hat Ihnen gefallen und wir Sie bald wieder zu sehen!";
+
+                document.getElementById("photos").innerHTML = "&#9733; Alle rechte an den fotos liegen bei ihren autoren (copyright)!";
+
+                limba = "de";
+    }
+    function Romana(){
+                document.getElementById("title").innerHTML = "Bun venit la Yummy!<br> Poti comanda tot ce doresti din gama noastra de mancare si dulciuri. &nbsp;Bautura preferata ti-o prepari singur, acesta fiind motivul pentru care nu gasesti niciun fel de bautura in meniul nostru.<br> Speram ca ti-a placut la noi si ca ne vom revedea curand!";
+
+                document.getElementById("photos").innerHTML = "&#9733; Toate drepturile asupra fotografiilor sunt rezervate autorilor de drept (copyright)!";
+
+                limba = "ro";
+    }
+    function Spaniola(){
+
+                document.getElementById("title").innerHTML = "Bienvenido a Yummy!<br> Puedes pedir todo lo que quieras de nuestra gama de alimentos y dulces. &nbsp; Puede preparar su propia bebida por su cuenta, por lo que no puede encontrar ninguna bebida en nuestro menú. <br>¡Esperamos que lo hayas disfrutado de nuestra estancia y nos vemos pronto!";
+
+                document.getElementById("photos").innerHTML = "&#9733; Todos los derechos sobre las fotos están reservados a sus autores (copyright)!";
+
+                limba = "esp";
+    }
+    function Portugheza(){
+                document.getElementById("title").innerHTML = "Bem-vindo ao Yummy!<br> Você pode pedir tudo o que quiser de nossa variedade de alimentos e doces. &nbsp;Você pode fazer sua própria bebida por conta própria, por isso não encontra bebidas em nosso cardápio. <br>Esperamos que tenha gostado da nossa estadia e nos vemos em breve!";
+
+                document.getElementById("photos").innerHTML ="&#9733; Todos os direitos sobre as fotos são reservados aos seus autores (copyright)!";
+
+                limba = "pt";
+    }
+
+</script>
+<body>
+    <div class="container">
+           <nav>
+               <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <div>
+                        <a href="menu.html">Location</a>
+                </div>   
+            <div class="logo">
+                <a href="#"><div class="lang-menu"></a>
+                <!--In functie de tara unde ma aflu, se selecteaza automat limba-->
+                   <div class="selected-lang"><span style='font-size:30px;'>&#128072;</span>
+                    </div>
+                        <ul>
+                            <li>
+                                <a href ="#" class="de" onclick="German()"> Deutsch</a>
+                            </li>
+        
+                            <li>
+                                <a href ="#" class="us" onclick="English()">English</a>
+                            </li>
+        
+                            <li>
+                                <a href ="#" class="fr" onclick="French()" > Français</a>
+                            </li>
+                            <li>
+                                <a href ="#" class="it" onclick="Italian()" >Italiano</a>
+                            </li>
+        
+                            <li>
+                                <a href ="#" class="ro" onclick="Romana()" >Romana</a>
+                            </li>
+        
+                            <li>
+                            <a href="#" class="es" onclick="Spaniola()">Español</a>
+                            </li>
+        
+                            <li>
+                            <a href="#" class="pt" onclick="Portugheza()">Português</a>
+                            </li>      
+                        </ul>
+            </div>
+        </div> 
+               
+    </nav>
+           <div class="content">
+               <h1 id="title">Welcome to Yummy, you can order whatever you want from our range of food and sweets. &nbsp;We are waiting for you to prepare your favorite drink by yourself, this is the reason why you will not find any drink on our menu. <br>We hope you enjoyed it and look forward to seeing you again!</h1>
+           </div>
+    </div>
+         
+    <h4 id="photos">&#9733; Toate drepturile asupra fotografiilor sunt rezervate autorilor de drept (copyright)!</h4>
+
+    <script>
+        Search();
+        getLocaleLanguage();
+    </script>
+</body>
+</html>
+

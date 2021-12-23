@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'poppins', serif;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            background-image: url(https://images.pexels.com/photos/5370916/pexels-photo-5370916.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500);
+            background-size: cover;
+            background-position: center;
+            padding: 0 8%;/*Delicate Logo + Courses + Login + Sign Up  S-au mutat mai in dreapta, dar au ramas tot in dreapta sus*/
+        }
+        nav{
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 20px 0;
+            font-size: 25px;
+        }
+        .nav-links{
+            display: flex;
+            flex: 1;
+            align-items: center;
+            justify-content: center;/*space-between Imi muta unul langa Logo, celalalt in dreapta su*/
+        }
+        .nav-links a{
+            text-decoration: none;
+            color: black;
+            margin-left: 40px;
+        }
+        .logo{
+            width:100px;
+        }
+        .logo img{
+            width:100px;
+        }
+
+        .lang-menu{
+            display: flex;
+            margin-top: -3px;
+            margin-left: -10px;
+            justify-content: center;
+            z-index: 1;
+        }
+        .selected-lang{
+            cursor: pointer;
+            display:inline-block;
+            justify-content: space-between;
+            line-height:2;
+            width: 100px;
+        }
+        .selected-lang:before{
+            content:'';
+            display:inline-block;
+            text-align:center; 
+            background-image: url(https://i.pinimg.com/originals/3b/c0/a4/3bc0a4a8e39bb561d24c0a9d7a7f0c07.png);
+            width: 40px;
+            height: 33px;
+        }
+        .lang-menu ul{
+            margin:0;
+            padding:0;
+            background-color:#fff;
+            width: 1px; /*Adaugand latimea, mi-a iesit doar o dunga in loc de o cutie la limba*/
+            border:1px solid #f8f8f8;
+            box-shadow:0px 1px 10px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            display: none;
+            position : absolute;
+            top: 40px;
+            left: 20;
+        }
+        .lang-menu ul li{
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+        }
+        .lang-menu ul li a{
+            width: 100px;
+            display:inline-block;
+            padding: 5px 10px;
+        }
+        .lang-menu ul li a:before{
+            content:'';
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            margin-right:10px;
+            vertical-align: middle;
+        }
+        .lang-menu ul li a:hover{
+            background-color: greenyellow;
+            opacity: 0.7;
+            width: 120px;
+        }
+        .de:before{
+            background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Germany-icon.png);
+        }
+        .us:before{
+            background-image: url(https://icons.iconarchive.com/icons/icons-land/vista-flags/32/United-States-Flag-1-icon.png);
+        }
+        .fr:before{
+            background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/France-icon.png);
+        }
+        .it:before{
+            background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Italy-icon.png);
+        }
+        .ro:before{
+            background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Romania-icon.png);
+        }
+        .es:before{
+            background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Spain-icon.png);
+        }
+        .pt:before{
+            background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Portugal-icon.png);
+        }
+        .lang-menu:hover ul{
+            display: block;
+        }
+        .content{
+            margin-top: 550px;
+            color: white;
+            background-color: black;
+            opacity: 0.6;
+            text-align: center;
+        }
+        .content #titleM{
+            font-size: 60px;
+        }
+        
+        @media (max-width:700px){
+            .search-box input{
+                width: 230px;
+            }
+
+            .nav-links{
+                justify-content: center;
+            }
+
+            .nav-links a{
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+
+            .content #titleM{
+            padding: 10px 10px 30px 10px;
+            font-size: 30px;
+            text-align: center;
+            background-color: black;
+            opacity: 0.7;
+            }
+
+            .content{
+                margin-top: 535px;
+            }
+
+        }
+    </style>
+</head>
+
+    <script>
+
+var limba = "ro";
+		var x = document.getElementsByClassName("content");
+
+		function getLocation() {
+  					if (navigator.geolocation) {
+    					navigator.geolocation.getCurrentPosition(OnPositionRetrieved);
+  					} 
+		  			else { 
+    						x.innerHTML = "Geolocation is not supported by this browser.";
+  					}
+		}
+
+		function OnPositionRetrieved(position) {
+                                x = document.getElementsByClassName("content");
+  								x.innerHTML = "Latitude: " + position.coords.latitude + 
+								"<br>Longitude: " + position.coords.longitude;
+		}
+       
+
+	var txtCautare = document.getElementsByClassName("content");
+
+    window.onload = function Search() {
+    var locale = getLocaleLanguage();
+    var locales = [
+        { name: "English", value: "en" },
+        { name: "Deutsch", value: "de" },
+        { name: "Français<", value: "fr" },
+        { name: "Italiano<", value: "it" },
+        { name: "Romana<", value: "ro" },
+        { name: "Español<", value: "esp" },
+        { name: "Português<", value:"pt"}
+
+    ];
+    getLocation();//Aflu limba vorbita in functie de locatia unde ma aflu
+    }
+//Site-ul se va deschide automat in limba vorbita in    locul unde ma aflu
+    function getLocaleLanguage() {
+        var limba_preferata = navigator.language.substr(0, 2);
+
+        if (limba_preferata == "en") 
+                    English();
+            else if(limba_preferata == "de")
+                    German();
+            else if(limba_preferata == "fr")
+                    French();
+            else if(limba_preferata == "it")
+                    Italian();
+            else if(limba_preferata == "ro")
+                    Romana();
+            else if(limba_preferata == "esp")
+                    Spaniola();
+            else if(limba_preferata == "pt")
+                    Portugheza();
+            
+            else
+                    English();
+
+    } 
+    function English(){
+
+                document.getElementById("titleM").innerHTML = "You can find us on Sunflower street at <br>No. 764748, anywhere in the world.<br>You can call us at 9846508!";
+
+                document.getElementById("photos").innerHTML = "&#9733; All rights on the photos are reserved to their authors (copyright)!";
+                
+                limba = "en";
+    }
+    function Italian(){
+            
+                document.getElementById("titleM").innerHTML = "Puoi trovarci in Via <br>Girasole No. 764748, in qualsiasi parte del mondo.<br>Puoi chiamarci al 9846508!"; 
+
+                document.getElementById("photos").innerHTML = "&#9733; Tutti i diritti sulle foto sono riservati a i loro autori (copyright)!";
+
+                limba = "it";
+    }
+    function French(){
+
+                document.getElementById("titleM").innerHTML = "Vous pouvez nous trouver sur la <br>Rue des Tournesols <br>No. 764748, partout dans le monde. <br>Vous pouvez nous appeler au 9846508!";
+
+                document.getElementById("photos").innerHTML = "&#9733; Tous les droits sur les photos sont réservés à leurs auteurs (copyright)! ";
+
+                limba = "fr";
+    }
+    function German(){
+                document.getElementById("titleM").innerHTML = "Sie finden uns weltweit in der Sonnenblumenstraße <br>Nr. 764748. <br>Sie können uns unter 9846508 anrufen!";
+
+                document.getElementById("photos").innerHTML = "&#9733; Alle rechte an den fotos liegen bei ihren autoren (copyright)!";
+
+                limba = "de";
+    }
+    function Romana(){
+                document.getElementById("titleM").innerHTML = "Ne poti gasi pe Strada <br>Floarea Soarelui Nr 764748, <br>oriunde in lume. <br>Poti sa ne suni la nr 9846508!";
+
+                document.getElementById("photos").innerHTML = "&#9733; Toate drepturile asupra fotografiilor sunt rezervate autorilor de drept (copyright)!";
+
+                limba = "ro";
+    }
+    function Spaniola(){
+
+                document.getElementById("titleM").innerHTML = "Nos puede encontrar en la Calle <br>Girasol No. 764748, <br>en cualquier parte del mundo. <br>¡Puedes llamarnos al 9846508!";
+
+                document.getElementById("photos").innerHTML = "&#9733; Todos los derechos sobre las fotos están reservados a sus autores (copyright)!";
+
+                limba = "esp";
+    }
+    function Portugheza(){
+                document.getElementById("titleM").innerHTML = "Você pode nos encontrar na Rua Girassol Nº 764748, <br>em qualquer lugar do mundo. <br>Você pode nos ligar em 9846508!";
+
+                document.getElementById("photos").innerHTML ="&#9733; Todos os direitos sobre as fotos são reservados aos seus autores (copyright)!";
+
+                limba = "pt";
+    }
+
+    </script>
+<body>
+    <div class="container">
+        <nav>
+            <div class="nav-links">
+                 <a href="index.html">Home</a>
+                 <div>
+                     <a href="pagina.html">Drink</a>
+             </div>   
+         <div class="logo">
+             <a href="#"><div class="lang-menu"></a>
+             <!--In functie de tara unde ma aflu, se selecteaza automat limba-->
+                <div class="selected-lang"><span style='font-size:30px;'>&#128072;</span>
+                 </div>
+                     <ul>
+                         <li>
+                             <a href ="#" class="de" onclick="German()"> Deutsch</a>
+                         </li>
+     
+                         <li>
+                             <a href ="#" class="us" onclick="English()">English</a>
+                         </li>
+     
+                         <li>
+                             <a href ="#" class="fr" onclick="French()" > Français</a>
+                         </li>
+                         <li>
+                             <a href ="#" class="it" onclick="Italian()" >Italiano</a>
+                         </li>
+     
+                         <li>
+                             <a href ="#" class="ro" onclick="Romana()" >Romana</a>
+                         </li>
+     
+                         <li>
+                         <a href="#" class="es" onclick="Spaniola()">Español</a>
+                         </li>
+     
+                         <li>
+                         <a href="#" class="pt" onclick="Portugheza()">Português</a>
+                         </li>      
+                     </ul>
+         </div>
+     </div> 
+            
+ </nav>
+           <div class="content">
+               <h1 id="titleM">You can find us on Sunflower street at <br>No. 764748, anywhere in the world.<br>You can call us at 9846508!</h1>
+           </div>
+    </div>
+
+    <h4 id="photos">&#9733; Toate drepturile asupra fotografiilor sunt rezervate autorilor de drept (copyright)!</h4>
+
+    <script>
+        Search();
+        getLocaleLanguage();
+    </script>
+
+</body>
+</html>

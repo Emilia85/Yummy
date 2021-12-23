@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar</title>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        box-sizing: border-box;
+    }
+    #emoji{
+        text-align: center;
+        color: green;
+        padding: 20px;
+        font-size: 60px;
+    }
+    nav{
+        background-color: lime;
+        display: grid;
+        place-items: center;
+    }
+    nav ul{
+        list-style-type: none;
+    }
+    nav ul a{
+        display: inline-block;
+        padding: 20px;
+        text-decoration: none;
+        color: #000;
+        transition: 0.2s ease-in;
+        font-size: 18px;
+    }
+    nav ul a:hover{
+        background-color:green;
+        color: white;
+    }
+    .logo{
+        width:100px;
+    }
+    .logo img{
+        width:100px;
+    }
+
+    .lang-menu{
+        margin-top: -55px;
+        margin-left: -115px;
+        position: relative;
+        z-index: 1;
+    }
+    .selected-lang{
+        cursor: pointer;
+        display:inline-block;
+        justify-content: space-between;
+        line-height:2;
+        width: 100px;
+    }
+    .selected-lang:before{
+        content:'';
+        display:inline-block;
+        text-align:center; 
+        background-image: url(https://i.pinimg.com/originals/3b/c0/a4/3bc0a4a8e39bb561d24c0a9d7a7f0c07.png);
+        width: 40px;
+        height: 33px;
+    }
+    .lang-menu ul{
+        margin:0;
+        padding:0;
+        width: 100px;/*Latimea cutiei cu limbi*/
+        background-color:#fff;
+        border:1px solid #f8f8f8;
+        box-shadow:0px 1px 10px rgba(0,0,0,0.2);
+        border-radius: 5px;
+        display: none;
+        position : absolute;
+        top: 40px;
+        left: 20;
+    }
+    .lang-menu ul li{
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+    }
+    .lang-menu ul li a{
+        width: 150px;
+        display:inline-block;
+        padding: 5px 10px;
+    }
+    .lang-menu ul li a:before{
+        content:'';
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        margin-right:10px;
+        vertical-align: middle;
+    }
+    .lang-menu ul li a:hover{
+        background-color:#eda8a8;
+    }
+    .de:before{
+        background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Germany-icon.png);
+    }
+    .us:before{
+        background-image: url(https://icons.iconarchive.com/icons/icons-land/vista-flags/32/United-States-Flag-1-icon.png);
+    }
+    .fr:before{
+        background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/France-icon.png);
+    }
+    .it:before{
+        background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Italy-icon.png);
+    }
+    .ro:before{
+        background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Romania-icon.png);
+    }
+    .es:before{
+        background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Spain-icon.png);
+    }
+    .pt:before{
+        background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Portugal-icon.png);
+    }
+    .lang-menu:hover ul{
+        display: block;
+    }
+    .food{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        padding: 30px 20px;
+        grid-column-gap: 20px;
+        grid-row-gap: 30px;
+        background-color: rgb(0, 87, 128);
+    }
+    .yummy img{
+        width: 100%;
+        height: 300px;
+        border: 1px, solid white;
+        border-radius: 50%;
+        box-shadow: grey 0 0 30px;
+        object-fit: cover;
+        cursor: pointer;
+    }
+    
+    .yummy img:hover{
+        transform: scale(1.04);
+    }
+    .yummy h4{
+        padding: 5px;
+        text-align: center;
+    }
+    .yummy button{
+        padding: 5px 30px;
+        border: none;
+        outline: none;
+        background-color: rgb(55, 134, 97);
+        color: white;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 20px;
+        display: block;
+        margin: 0 auto;
+        transition: 0.2s all;
+    }
+    .yummy button:hover{
+        transform: scale(1.10);
+    }
+    @media screen and (max-width: 1000px) {
+        .food{
+            grid-template-columns: repeat(2, 1fr);
+            background-color: rgb(245, 223, 77);
+        }
+    }
+    @media screen and (max-width: 768px) {
+        .food{
+            grid-template-columns: repeat(1, 1fr);
+            background-color: rgb(255, 187, 185);
+        }
+    }
+    
+    .info{
+        transition: 00.2s ease;
+        animation: mymove 5s infinite;    
+    }
+    @keyframes mymove {
+        50% {box-shadow: 10px 20px 30px rgb(0, 208, 255);}
+        }
+    
+</style>
+
+<script>
+        var limba = "ro";
+		var x = document.getElementsByClassName("food");
+
+		function getLocation() {
+  					if (navigator.geolocation) {
+    					navigator.geolocation.getCurrentPosition(OnPositionRetrieved);
+  					} 
+		  			else { 
+    						x.innerHTML = "Geolocation is not supported by this browser.";
+  					}
+		}
+
+		function OnPositionRetrieved(position) {
+                                x = document.getElementsByClassName("food");
+  								x.innerHTML = "Latitude: " + position.coords.latitude + 
+								"<br>Longitude: " + position.coords.longitude;
+		}
+       
+
+	var txtCautare = document.getElementsByClassName("food");
+
+    window.onload = function Search() {
+    var locale = getLocaleLanguage();
+    var locales = [
+        { name: "English", value: "en" },
+        { name: "Deutsch", value: "de" },
+        { name: "Français<", value: "fr" },
+        { name: "Italiano<", value: "it" },
+        { name: "Romana<", value: "ro" },
+        { name: "Español<", value: "esp" },
+        { name: "Português<", value:"pt"}
+
+    ];
+    getLocation();//Aflu limba vorbita in functie de locatia unde ma aflu
+    }
+//Site-ul se va deschide automat in limba vorbita in    locul unde ma aflu
+    function getLocaleLanguage() {
+        var limba_preferata = navigator.language.substr(0, 2);
+
+        if (limba_preferata == "en") 
+                    English();
+            else if(limba_preferata == "de")
+                    German();
+            else if(limba_preferata == "fr")
+                    French();
+            else if(limba_preferata == "it")
+                    Italian();
+            else if(limba_preferata == "ro")
+                    Romana();
+            else if(limba_preferata == "esp")
+                    Spaniola();
+            else if(limba_preferata == "pt")
+                    Portugheza();
+            
+            else
+                    English();
+
+    } 
+    
+    function English(){
+
+            document.getElementById("brioche").onclick = ButonE;
+            document.getElementById("zmeura").onclick = ZmeuraE;
+            document.getElementById("melcisori").onclick = MelcisoriE;
+            document.getElementById("stafide").onclick = StafideE;
+            document.getElementById("cupcakes").onclick = CupcakesE;
+            document.getElementById("cioco").onclick = CiocoE;
+            document.getElementById("clatite").onclick = ClatiteE;
+            document.getElementById("clasic").onclick = ClasicE;
+            document.getElementById("sarat").onclick = SaratE;
+            document.getElementById("somon").onclick = SomonE;
+            document.getElementById("prajit").onclick = PrajitE;
+            document.getElementById("avocado").onclick = AvocadoE;
+            document.getElementById("ridichi").onclick = RidichiE;
+            document.getElementById("ciuperci").onclick = CiuperciE;
+            document.getElementById("ragu").onclick = RaguE;
+            document.getElementById("vongole").onclick = VongoleE;
+            document.getElementById("amatriciana").onclick = AmatricianaE;
+            document.getElementById("pomodoro").onclick = PomodoroE;
+            document.getElementById("lasagna").onclick = LasagnaE;
+            document.getElementById("formaggi").onclick = FormaggiE;
+            document.getElementById("ceapa").onclick = CeapaE;
+            document.getElementById("capsuni").onclick = CapsuniE;
+            document.getElementById("rucola").onclick = RucolaE;
+            document.getElementById("bacon").onclick = BaconE;
+            document.getElementById("club").onclick = ClubE;
+            document.getElementById("cheese").onclick = CheeseE;
+            document.getElementById("falafel").onclick = FalafelE;
+
+            document.getElementById("photos").innerHTML = "&#9733; All rights on the photos are reserved to their authors (copyright)!";
+
+            limba = "en";
+            
+            
+    }
+
+    function ButonE(){
+
+            alert("Brioche 😋 Ingredients: flour, water, eggs, powdered sugar. The cost is $ 1.50 each.");
+    }
+
+    function ZmeuraE(){
+
+            alert("Brioche 😋 Ingredients: flour, water, eggs, vanilla cream, raspberries, blackberries, peaches, powdered sugar. The cost is $ 1.50 each.");
+    }
+
+    function MelcisoriE(){
+
+            alert("Brioche 😋 Ingredients: flour, water, eggs, honey, walnuts. The cost is $ 1.50 each.");
+    }
+
+    function StafideE(){
+
+            alert("Brioche 😋 Ingredients: flour, milk, eggs, sugar, raisins, vanilla cream, icing sugar and lemon. The cost is $ 1.50 each.");
+    }
+
+    function CupcakesE(){
+
+            alert("Cupcake 😋 Ingredients: flour, milk, eggs, butter, sugar, vanilla, berries. The cost is $ 2 each.");
+    }
+
+    function CiocoE(){
+
+            alert("Cupcake 😋 Ingredients: flour, milk, eggs, butter, sugar, cocoa, chocolate flakes. The cost is $ 2 each.");
+    }
+
+    function ClatiteE(){
+
+            alert("Fluffy Pancakes 😋 Ingredients: flour, milk, eggs, sugar, blueberry decoration, blackberries and maple syrup. The cost is $ 1 each.");
+    }
+      
+    function ClasicE(){
+
+            alert("Pancakes 😋 Ingredients: flour, milk, eggs, sugar, stuffed with strawberry jam or chocolate. The cost is $ 1 for 2 pieces.");
+    }   
+
+    function SaratE(){
+
+            alert("Salty Brioche 😋 Ingredients for croissant: flour, milk, eggs, stuffing with ham, cheese and lettuce. The cost is $ 3 each.");
+    }   
+
+    function SomonE(){
+
+            alert("Salmon break 😋 Ingredients: toast, cream cheese with dill, salmon, capers. The cost is $ 3 each.");
+    }   
+
+    function PrajitE(){
+
+            alert("Fantasy 😋 Ingredients: toast, salad, avocado, salmon, egg. The cost is $ 5 for portion.");
+    }   
+
+    function RidichiE(){
+
+            alert("Salad 😋 Ingredients: toast, salad, radish, cheese, chicken breast. The cost is $ 5 for portion.");
+    }  
+    
+    function CiuperciE(){
+
+            alert("Mushroom Salad 😋 Ingredients: mushrooms, lettuce, grated cheese. The cost is $ 5 for portion.");
+    }  
+
+    function RaguE(){
+
+            alert("😋 Pasta with meat sauce and grated cheese on top. The cost is $ 5 for portion.");
+    }  
+
+    function VongoleE(){
+
+            alert("😋 Spaghetti with clams. The cost is $ 5 for portion.");
+    }  
+
+    function AmatricianaE(){
+
+            alert("😋 Spaghetti all' Amatriciana. The cost is $ 5 for portion.");
+    }  
+
+    function PomodoroE(){
+
+            alert("😋 Spaghetti with tomato sauce and grated cheese on top. The cost is $ 5 for portion.");
+    }  
+    function LasagnaE(){
+
+            alert("😋 Lasagna with wild boar sauce. The cost is $ 5 for portion.");
+    }  
+
+    function FormaggiE(){
+
+            alert("😋 Pizza quattro formaggi. The cost is $ 9.");
+    }  
+
+    function CeapaE(){
+
+            alert("😋 Lumberjack pizza: mozzarella, mushrooms, spinach and onions. The cost is $ 9.");
+    }  
+
+    function CapsuniE(){
+
+            alert("😋 Summer pizza: mozzarella, cream cheese, strawberries, pistachios and basil. The cost is $ 9.");
+    }  
+
+    function RucolaE(){
+
+            alert("😋 Pizza arugula, grana and bresaola. The cost is $ 9.");
+    }  
+
+    function AvocadoE(){
+
+            alert("Tuna time 😋 Ingredients: bread, cucumbers, tuna, tomatoes, red onion, capers, egg, lettuce. The cost is $ 5.");
+    }   
+
+    function BaconE(){
+
+            alert("😋 Beef burger, egg, cheese and bacon, well nested in a toasted bun inside. The cost is $ 9.");
+    }  
+
+    function ClubE(){
+
+            alert("😋 Club Sandwich: beef burger, egg, cheese, bacon, tomatoes, lettuce, carrot and french fries. The cost is $ 9.");
+    }  
+
+    function CheeseE(){
+
+            alert("😋 Cheeseburger: double beef burger, cascading cheese, bacon, pickled cucumbers, all in a toasted wholemeal bun. The cost is $ 9.");
+    }  
+
+    function FalafelE(){
+
+            alert("😋 Falafel, avocado salad, sun-dried tomatoes, bell peppers, rest in a rye flour bun. The cost is $ 9.");
+}     
+    function Italian(){
+
+           document.getElementById("brioche").onclick = ButonI;
+           document.getElementById("zmeura").onclick = ZmeuraI;
+           document.getElementById("melcisori").onclick = MelcisoriI;
+           document.getElementById("stafide").onclick = StafideI;
+           document.getElementById("cupcakes").onclick = CupcakesI;
+           document.getElementById("cioco").onclick = CiocoI;
+           document.getElementById("clatite").onclick = ClatiteI;
+           document.getElementById("clasic").onclick = ClasicI;
+           document.getElementById("sarat").onclick = SaratI;
+           document.getElementById("somon").onclick = SomonI;
+           document.getElementById("prajit").onclick = PrajitI;
+           document.getElementById("avocado").onclick = AvocadoI;
+           document.getElementById("ridichi").onclick = RidichiI;
+           document.getElementById("ciuperci").onclick = CiuperciI;
+           document.getElementById("ragu").onclick = RaguI;
+           document.getElementById("vongole").onclick = VongoleI;
+           document.getElementById("amatriciana").onclick = AmatricianaI;
+           document.getElementById("pomodoro").onclick = PomodoroI;
+           document.getElementById("lasagna").onclick = LasagnaI;
+           document.getElementById("formaggi").onclick = FormaggiI;
+           document.getElementById("ceapa").onclick = CeapaI;
+           document.getElementById("capsuni").onclick = CapsuniI;
+           document.getElementById("rucola").onclick = RucolaI;
+           document.getElementById("bacon").onclick = BaconI;
+           document.getElementById("club").onclick = ClubI;
+           document.getElementById("cheese").onclick = CheeseI;
+           document.getElementById("falafel").onclick = FalafelI;
+
+           document.getElementById("photos").innerHTML = "&#9733; Tutti i diritti sulle foto sono riservati a i loro autori (copyright)!";
+
+           limba = "it";
+    }
+    
+    function ButonI(){
+
+            alert("Brioche 😋 Ingredienti: farina, acqua, uova, zucchero a velo. Il costo è di 1,50 € cadauno.");
+    }
+
+    function ZmeuraI(){
+
+            alert("Brioche 😋 Ingredienti: farina, acqua, uova, crema alla vaniglia, lamponi, more, pesche, zucchero a velo. Il costo è di 1,50 € cadauno.");
+    }
+
+    function MelcisoriI(){
+
+            alert("Brioche 😋 Ingredienti: farina, acqua, uova, miele, noci. Il costo è di 1,50 € ciascuno.");
+    }
+
+    function StafideI(){
+
+            alert("Brioche 😋 Ingredienti: farina, latte, uova, zucchero, uvetta, crema alla vaniglia, glassa di zucchero a velo e limone. Il costo è di 1,50 € ciascuno.");
+    }
+
+    function CupcakesI(){
+
+            alert("Cupcake 😋 Ingredienti: farina, latte, uova, burro, zucchero, vaniglia, frutti di bosco. Il costo è di 2 € ciascuno.");
+    }
+
+    function CiocoI(){
+
+            alert("Cupcake 😋 Ingredienti: farina, latte, uova, burro, zucchero, cacao, scaglie di cioccolato. Il costo è di 2 € per pezzo.");
+    }
+
+    function ClatiteI(){
+
+            alert("Pancake 😋 Ingredienti: farina, latte, uova, zucchero, decorazione di mirtilli, more e sciroppo d'acero. Il costo è di 1 € per pezzo.");
+    }
+    function ClasicI(){
+
+            alert("Crêpes 😋 Ingredienti: farina, latte, uova, zucchero, farcite con marmellata di fragole o cioccolato. Il costo è di 1 € per 2 pezzi.");
+    }
+
+    function SaratI(){
+
+            alert("Brioche Salata 😋 Ingredienti per brioche: farina, latte, uova, ripieno di prosciutto, formaggio e insalata. Il costo è di 3 € per pezzo.");
+    }
+
+    function SomonI(){
+
+            alert("Pausa per Salmone 😋 Ingredienti: pane tostato, crema di formaggio con aneto, salmone, capperi. Il costo è di 3 € per pezzo.");
+    }
+
+    function PrajitI(){
+
+            alert("Fantesia 😋 Ingredienti: pane tostato, insalata, avocado, salmone, uova. Il costo è di 5 € a porzione.");
+    }
+
+    function RidichiI(){
+
+            alert("Insalata 😋 Ingredienti: pane tostato, insalata, ravanello, formaggio, petto di pollo. Il costo è di 5 € a porzione.");
+    }   
+
+    function CiuperciI(){
+
+            alert("Insalata di Funghi 😋 Ingredienti: funghi, lattuga, formaggio grattugiato. Il costo è di 5 € a porzione.");
+    }   
+
+    function RaguI(){
+
+            alert("😋 Pasta al ragù e formaggio grattugiato sopra. Il costo è di 5 € a porzione.");
+    }   
+
+    function VongoleI(){
+
+            alert("😋 Spaghetti alle vongole. Il costo è di 5 € a porzione.");
+    }   
+
+    function AmatricianaI(){
+
+            alert("😋 Spaghetti all' Amatriciana. Il costo è di 5 € a porzione.");
+    } 
+
+    function PomodoroI(){
+
+            alert("😋 Spaghetti con sugo al pomodoro formaggio grattugiato sopra. Il costo è di 5 € a porzione.");
+    } 
+
+    function LasagnaI(){
+
+            alert("😋 Lasagna con sugo di cinghiale. Il costo è di 5 € a porzione.");
+    } 
+
+    function FormaggiI(){
+
+            alert("😋 Pizza quattro formaggi. Il costo è di 9 €.");
+    } 
+
+    function CeapaI(){
+
+            alert("😋 Pizza al boscaiolo: mozzarella, funghi, spinaci e cipolle. Il costo è di 9 €.");
+    } 
+
+    function CapsuniI(){
+
+            alert("😋 Pizza estiva: mozzarella, crema di formaggio, fragole, pistacchio e basilico. Il costo è di 9 €.");
+    } 
+
+    function RucolaI(){
+
+            alert("😋 Pizza rucola, grana e bresaola. Il costo è di 9 €.");
+    } 
+
+    function AvocadoI(){
+
+            alert("Tempo per il Tono 😋 Ingredienti: pane, cetrioli, tonno, pomodori, cipolla rossa, capperi, uova, lattuga. Il costo è di 5 €.");
+    }
+    function BaconI(){
+
+            alert("😋 Hamburger di manzo, uova, formaggio e pancetta, ben annidati in un panino tostato all'interno. Il costo è di 9 €.");
+    } 
+
+    function ClubI(){
+
+            alert("😋 Club Sandwich: hamburger di manzo, uova, formaggio, pancetta, pomodori, lattuga, carote e patatine fritte. Il costo è di 9 €.");
+    }   
+
+    function CheeseI(){
+
+            alert("😋 Cheeseburger: doppio hamburger di manzo, formaggio a cascata, pancetta, cetrioli sottaceto, il tutto in un panino integrale tostato. Il costo è di 9 €.");
+    }   
+
+    function FalafelI(){
+
+            alert("😋 Falafel, insalata di avocado, pomodori secchi, peperoni, riposano in un panino con farina di segale. Il costo è di 9 €.");
+    } 
+
+    function French(){
+	
+            document.getElementById("brioche").onclick = ButonF;
+            document.getElementById("zmeura").onclick = ZmeuraF;
+            document.getElementById("melcisori").onclick = MelcisoriF;
+            document.getElementById("stafide").onclick = StafideF;
+            document.getElementById("cupcakes").onclick = CupcakesF;
+            document.getElementById("cioco").onclick = CiocoF;
+            document.getElementById("clatite").onclick = ClatiteF;
+            document.getElementById("clasic").onclick = ClasicF;
+            document.getElementById("sarat").onclick = SaratF;
+            document.getElementById("somon").onclick = SomonF;
+            document.getElementById("prajit").onclick = PrajitF;
+            document.getElementById("avocado").onclick = AvocadoF;
+            document.getElementById("ridichi").onclick = RidichiF;
+            document.getElementById("ciuperci").onclick = CiuperciF;
+            document.getElementById("ragu").onclick = RaguF;
+            document.getElementById("vongole").onclick = VongoleF;
+            document.getElementById("amatriciana").onclick = AmatricianaF;
+            document.getElementById("pomodoro").onclick = PomodoroF;
+            document.getElementById("lasagna").onclick = LasagnaF;
+            document.getElementById("formaggi").onclick = FormaggiF;
+            document.getElementById("ceapa").onclick = CeapaF;
+            document.getElementById("capsuni").onclick = CapsuniF;
+            document.getElementById("rucola").onclick = RucolaF;
+            document.getElementById("bacon").onclick = BaconF;
+            document.getElementById("club").onclick = ClubF;
+            document.getElementById("cheese").onclick = CheeseF;
+            document.getElementById("falafel").onclick = FalafelF;
+
+            document.getElementById("photos").innerHTML = "&#9733; Tous les droits sur les photos sont réservés à leurs auteurs (copyright)! ";
+
+            limba = "fr";
+    }
+
+    function ButonF(){
+
+            alert("Brioche 😋 Ingrédients: farine, eau, œufs, sucre en poudre. Le coût est de 1,50 € chacun.");
+    }
+
+    function ZmeuraF(){
+        
+            alert("Brioche 😋 Ingrédients: farine, eau, œufs, crème vanille, framboises, mûres, pêches, sucre en poudre. Le coût est de 1,50 € chacun.");
+    }
+
+    function MelcisoriF(){
+        
+            alert("Brioche 😋 Ingrédients: farine, eau, œufs, miel, noix. Le coût est de 1,50 € chacun.");
+    }
+
+    function StafideF(){
+        
+            alert("Brioche 😋 Ingrédients: farine, lait, œufs, sucre, raisins secs, crème vanille, glaçage au sucre et citron. Le coût est de 1,50 € chacun.");
+    }
+
+    function CupcakesF(){
+        
+            alert("Cupcake 😋 Ingrédients: farine, lait, œufs, beurre, sucre, vanille, baies. Le coût est de 2 € chacun.");
+    }
+
+    function CiocoF(){
+        
+            alert("Cupcake 😋 Ingrédients: farine, lait, œufs, beurre, sucre, cacao, flocons de chocolat. Le coût est de 2 € chacun.");
+    }
+
+    function ClatiteF(){
+        
+            alert("Pancake 😋 Ingrédients: farine, lait, œufs, sucre, décor de myrtilles, mûres et sirop d'érable. Le coût est de 1 € chacun.");
+    }
+
+    function ClasicF(){
+        
+            alert("Crêpe 😋 Ingrédients: farine, lait, œufs, sucre, farcis à la confiture de fraise ou au chocolat. Le coût est de 1 € pour 2 pièces.");
+    }
+
+    function SaratF(){
+        
+            alert("Brioche Salée 😋 Ingrédients pour croissant: farine, lait, œufs, garniture au jambon, fromage et salade. Le coût est de 3 € pour pièce.");
+    }
+
+    function SomonF(){
+        
+            alert("Pause du Saumon 😋 Ingrédients: toasts, cream cheese à l'aneth, saumon, câpres. Le coût est de 3 € pour pièce.");
+    }   
+
+    function PrajitF(){
+        
+            alert("Fantaisie 😋 Ingrédients: toasts, salade, avocat, saumon, œuf. Le coût est de 5 € la portion.");
+    }    
+
+    function RidichiF(){
+        
+            alert("Salade 😋 Ingrédients: pain grillé, salade, radis, fromage, poitrine de poulet. Le coût est de 5 € la portion.");
+    }   
+
+    function CiuperciF(){
+        
+            alert("Salade de Champignons 😋 Ingrédients: champignons, laitue, fromage râpé. Le coût est de 5 € la portion.");
+    }   
+
+    function RaguF(){
+        
+            alert("😋 Pâtes avec sauce à la viande et fromage râpé sur le dessus. Le coût est de 5 € la portion.");
+    }   
+
+    function VongoleF(){
+        
+            alert("😋 Spaghetti aux palourdes. Le coût est de 5 € la portion.");
+    }   
+
+    function AmatricianaF(){
+        
+            alert("😋 Spaghetti all' Amatriciana. Le coût est de 5 € la portion.");
+    }   
+
+    function PomodoroF(){
+        
+            alert("😋 Spaghetti avec sauce tomate et fromage râpé sur le dessus. Le coût est de 5 € la portion.");
+    }   
+
+    function LasagnaF(){
+        
+            alert("😋 Lasagnes sauce sanglier. Le coût est de 5 € la portion.");
+    }   
+
+    function FormaggiF(){
+        
+            alert("😋 Pizza quattro formaggi. Le coût est de 9 €.");
+    }   
+
+    function CeapaF(){
+        
+            alert("😋 Pizza de bûcheron: mozzarella, champignons, épinards et oignons. Le coût est de 9 €.");
+    }   
+
+    function CapsuniF(){
+        
+            alert("😋 Pizza d'été: mozzarella, cream cheese, fraises, pistaches et basilic. Le coût est de 9 €.");
+    }   
+
+    function RucolaF(){
+        
+            alert("😋 Pizza roquette, grana et bresaola. Le coût est de 9 €.");
+    }   
+
+    function AvocadoF(){
+        
+            alert("L'heure du Thon 😋 Ingrédients: pain, concombres, thon, tomates, oignon rouge, câpres, œuf, laitue. Le coût est de 5 €.");
+    }  
+
+    function BaconF(){
+        
+            alert("😋 Burger de boeuf, oeuf, fromage et lard, bien niché dans un petit pain grillé à l'intérieur. Le coût est de 9 €.");
+    }   
+
+    function ClubF(){
+        
+            alert("😋 Club Sandwich: burger de boeuf, oeuf, fromage, lard, tomates, laitue, carotte et frites. Le coût est de 9 €.");
+    }   
+
+    function CheeseF(){
+        
+            alert("😋 Cheeseburger: burger double boeuf, fromage en cascade, lard, concombres marinés, le tout dans un petit pain complet grillé. Le coût est de 9 €.");
+    }   
+
+    function FalafelF(){
+        
+            alert("😋 Falafel, salade d'avocat, tomates séchées, poivrons, reposer dans un petit pain à la farine de seigle. Le coût est de 9 €.");
+    }   
+
+    function German(){
+	            
+            document.getElementById("brioche").onclick = ButonG;
+            document.getElementById("zmeura").onclick = ZmeuraG;
+            document.getElementById("melcisori").onclick = MelcisoriG;
+            document.getElementById("stafide").onclick = StafideG;
+            document.getElementById("cupcakes").onclick = CupcakesG;
+            document.getElementById("cioco").onclick = CiocoG;
+            document.getElementById("clatite").onclick = ClatiteG;
+            document.getElementById("clasic").onclick = ClasicG;
+            document.getElementById("sarat").onclick = SaratG;
+            document.getElementById("somon").onclick = SomonG;
+            document.getElementById("prajit").onclick = PrajitG;
+            document.getElementById("avocado").onclick = AvocadoG;
+            document.getElementById("ridichi").onclick = RidichiG;
+            document.getElementById("ciuperci").onclick = CiuperciG;
+            document.getElementById("ragu").onclick = RaguG;
+            document.getElementById("vongole").onclick = VongoleG;
+            document.getElementById("amatriciana").onclick = AmatricianaG;
+            document.getElementById("pomodoro").onclick = PomodoroG;
+            document.getElementById("lasagna").onclick = LasagnaG;
+            document.getElementById("formaggi").onclick = FormaggiG;
+            document.getElementById("ceapa").onclick = CeapaG;
+            document.getElementById("capsuni").onclick = CapsuniG;
+            document.getElementById("rucola").onclick = RucolaG;
+            document.getElementById("bacon").onclick = BaconG;
+            document.getElementById("club").onclick = ClubG;
+            document.getElementById("cheese").onclick = CheeseG;
+            document.getElementById("falafel").onclick = FalafelG;
+
+            document.getElementById("photos").innerHTML = "&#9733; Alle rechte an den fotos liegen bei ihren autoren (copyright)!";
+
+            limba = "de";
+    }
+    
+    function ButonG(){
+
+            alert("Brioche 😋 Zutaten: Mehl, Wasser, Eier, Puderzucker. Die Kosten betragen jeweils 1,50 €.");
+    }
+
+    function ZmeuraG(){
+        
+            alert("Brioche 😋 Zutaten: Mehl, Wasser, Eier, Vanillecreme, Himbeeren, Brombeeren, Pfirsiche, Puderzucker. Die Kosten betragen jeweils 1,50 €.");
+    }
+
+    function MelcisoriG(){
+        
+            alert("Brioche 😋 Zutaten: Mehl, Wasser, Eier, Honig, Walnüsse. Die Kosten betragen jeweils 1,50 €.");
+    }
+
+    function StafideG(){
+        
+            alert("Brioche 😋 Zutaten: Mehl, Milch, Eier, Zucker, Rosinen, Vanillecreme, Puderzuckerglasur mit Zitrone. Die Kosten betragen jeweils 1,50 €.");
+    }
+
+    function CupcakesG(){
+        
+            alert("Cupcake 😋 Zutaten: Mehl, Milch, Eier, Butter, Zucker, Vanille, Beeren. Die Kosten betragen jeweils 2 €.");
+    }
+
+    function CiocoG(){
+        
+            alert("Cupcake 😋 Zutaten: Mehl, Milch, Eier, Butter, Zucker, Kakao, Schokoladenflocken. Die Kosten betragen jeweils 2 €.");
+    }
+
+    function ClatiteG(){
+        
+            alert("American Pfannkuchen 😋 Zutaten: Mehl, Milch, Eier, Zucker, Heidelbeerdekoration, Brombeeren und Ahornsirup. Die Kosten betragen jeweils 1 €.");
+    }
+
+    function ClasicG(){
+        
+            alert("Pfannkuchen 😋 Zutaten: Mehl, Milch, Eier, Zucker, gefüllt mit Erdbeermarmelade oder Schokolade. Die Kosten betragen 1 € für 2 Stück.");
+    }
+
+    function SaratG(){
+        
+            alert("Salzige Brioche 😋 Zutaten für das Croissant: Mehl, Milch, Eier, Schinkenfüllung, Käse und Salat. Die Kosten betragen 3 € für 1 Stück.");
+    }
+    function SomonG(){
+        
+            alert("Lachs Brechen 😋 Zutaten: Toast, Frischkäse mit Dill, Lachs, Kapern. Die Kosten betragen jeweils 3 € für 1 Stück.");
+    }
+
+    function PrajitG(){
+
+            alert("Fantasie 😋 Zutaten: Toast, Salat, Avocado, Lachs, Ei. Die Kosten betragen 5 € pro Portion.");    
+    }
+
+    function RidichiG(){
+
+            alert("Salat 😋 Zutaten: Toast, Salat, Rettich, Käse, Hähnchenbrust. Die Kosten betragen 5 € pro Portion.");
+    }
+
+    function CiuperciG(){
+
+            alert("Pilzsalat 😋 Zutaten: Champignons, Salat, geriebener Käse. Die Kosten betragen 5 € pro Portion.");
+    }
+
+    function RaguG(){
+
+            alert("😋 Pasta mit Fleischsauce und geriebenem Käse darüber. Die Kosten betragen 5 € pro Portion.");
+    }
+
+    function VongoleG(){
+
+            alert("😋 Spaghetti mit Venusmuscheln. Die Kosten betragen 5 € pro Portion.");
+    }
+
+    function AmatricianaG(){
+
+            alert("😋 Spaghetti all' Amatriciana. Die Kosten betragen 5 € pro Portion.");
+    }       
+
+    function PomodoroG(){
+
+            alert("😋 Spaghetti mit Tomatensauce und geriebenem Käse darüber. Die Kosten betragen 5 € pro Portion.");
+    }      
+    
+    function LasagnaG(){
+
+            alert("😋 Lasagne mit Wildschweinsauce. Die Kosten betragen 5 € pro Portion.");
+    }     
+
+    function FormaggiG(){
+
+            alert("😋 Pizza quattro formaggi. Die Kosten betragen 9 €.");
+    }     
+
+    function CeapaG(){
+
+            alert("😋 Holzfällerpizza: Mozzarella, Champignons, Spinat und Zwiebeln. Die Kosten betragen 9 €.");
+    }  
+
+    function CapsuniG(){
+
+            alert("😋 Sommerpizza: Mozzarella, Frischkäse, Erdbeeren, Pistazien und Basilikum. Die Kosten betragen 9 €.");
+    }  
+
+    function RucolaG(){
+
+            alert("😋 Pizza Rucola, Grana und Bresaola. Die Kosten betragen 9 €.");
+    }  
+
+    function AvocadoG(){
+
+            alert("Thunfischzeit 😋 Zutaten: Brot, Gurken, Thunfisch, Tomaten, rote Zwiebel, Kapern, Ei, Salat. Die Kosten betragen 5 €.");
+    }
+
+    function BaconG(){
+
+            alert("😋 Burger von Rindern, Ei, Käse und Schinken, gut verschachtelt in einem gerösteten Brötchen. Die Kosten betragen 9 €.");
+    }  
+
+    function ClubG(){
+
+            alert("😋 Club Sandwich: burger von Rindern, Ei, Käse, Schinken, Tomaten, Salat, Karotten und Pommes Frites. Die Kosten betragen 9 €.");
+    }  
+
+    function CheeseG(){
+
+            alert("😋 Cheeseburger: Double Rindfleisch burger, Kaskadenkäse, Schinken, eingelegte Gurken, alles in einem gerösteten Vollkornbrötchen. Die Kosten betragen 9 €.");
+    }  
+
+    function FalafelG(){
+
+            alert("😋 Falafel, Avocadosalat, getrocknete Tomaten, Paprika, Rest im Roggenmehlbrötchen. Die Kosten betragen 9 €.");
+    }  
+
+    function Romana(){
+	       
+            document.getElementById("brioche").onclick = Buton;
+            document.getElementById("zmeura").onclick = Zmeura;
+            document.getElementById("melcisori").onclick = Melcisori;
+            document.getElementById("stafide").onclick = Stafide;
+            document.getElementById("cupcakes").onclick = Cupcakes;
+            document.getElementById("cioco").onclick = Cioco;
+            document.getElementById("clatite").onclick = Clatite;
+            document.getElementById("clasic").onclick = Clasic;
+            document.getElementById("sarat").onclick = Sarat;
+            document.getElementById("somon").onclick = Somon;
+            document.getElementById("prajit").onclick = Prajit;
+            document.getElementById("avocado").onclick = Avocado;
+            document.getElementById("ridichi").onclick = Ridichi;
+            document.getElementById("ciuperci").onclick = Ciuperci;
+            document.getElementById("ragu").onclick = Ragu;
+            document.getElementById("vongole").onclick = Vongole;
+            document.getElementById("amatriciana").onclick = Amatriciana;
+            document.getElementById("pomodoro").onclick = Pomodoro;
+            document.getElementById("lasagna").onclick = Lasagna;
+            document.getElementById("formaggi").onclick = Formaggi;
+            document.getElementById("ceapa").onclick = Ceapa;
+            document.getElementById("capsuni").onclick = Capsuni;
+            document.getElementById("rucola").onclick = Rucola;
+            document.getElementById("bacon").onclick = Bacon;
+            document.getElementById("club").onclick = Club;
+            document.getElementById("cheese").onclick = Cheese;
+            document.getElementById("falafel").onclick = Falafel;
+
+            document.getElementById("photos").innerHTML = "&#9733; Toate drepturile asupra fotografiilor sunt rezervate autorilor de drept (copyright)!";
+            
+            limba = "ro";
+    }
+    
+    function Buton(){
+
+            alert("Brioche 😋 Ingrediente: faina, apa, oua, zahar pudra. Costul este de 7,50 RON bucata.");
+    }
+
+    function Zmeura(){
+
+            alert("Brioche 😋 Ingrediente: faina, apa, oua, crema de vanilie, zmeura, mure, piersici,  zahar pudra. Costul este de 7,50 RON bucata.");
+    }
+
+    function Melcisori(){
+
+            alert("Brioche 😋 Ingrediente: faina, apa, oua, miere, nuca. Costul este de 7,50 RON bucata.");
+    }
+
+    function Stafide(){
+
+            alert("Brioche 😋 Ingrediente: faina, lapte, oua, zahar, stafide, crema de vanilie, glazura de zahar si lamaie. Costul este de 7,50 RON bucata.");
+    }
+
+    function Cupcakes(){
+
+            alert("Cupcake 😋 Ingrediente: faina, lapte, oua, unt, zahar, vanilie, fructe de padure. Costul este de 10 RON bucata.");
+    }
+
+    function Cioco(){
+
+            alert("Cupcake 😋 Ingrediente: faina, lapte, oua, unt, zahar, cacao, fulgi de ciocolata. Costul este de 10 RON bucata.");
+    }
+
+    function Clatite(){
+
+            alert("Clatite Americane 😋 Ingrediente: faina, lapte, oua, zahar, decor din afine, mure si sirop de artar. Costul este de 5 RON bucata.");
+    }
+
+    function Clasic(){
+
+            alert("Clatite 😋 Ingrediente: faina, lapte, oua, zahar, umplute cu dulceata de capsuni sau ciocolata. Costul este de 5 RON pentru 2 bucati.");
+    }
+
+    function Sarat(){
+
+            alert("Brioche Sarata 😋 Ingrediente pentru croissant: faina, lapte, oua, umplutura cu sunca, branza si salata. Costul este de 15 RON bucata.");
+    }
+
+    function Somon(){
+
+            alert("Pauza pentru somon 😋 Ingrediente: paine prajita, crema de branza cu marar, somon, capere. Costul este de 15 RON bucata.");
+    }
+
+    function Prajit(){
+
+            alert("Fantezie 😋 Ingrediente: paine prajita, salata, avocado, somon, ou. Costul este de 25 RON.");
+    }
+
+    function Ridichi(){
+
+            alert("Salata 😋 Ingrediente: paine prajita, salata, ridichie, cascaval, piept de pui. Costul este de 25 RON portia.");
+    }
+
+    function Ciuperci(){
+
+            alert("Salata cu ciuperci 😋 Ingrediente: ciuperci, salata verde, cascaval ras. Costul este de 25 RON portia.");
+    }
+
+    function Ragu(){
+
+            alert("😋 Paste cu sos de carne si branza rasa pe deasupra. Costul este de 25 RON portia.");
+    }
+
+    function Vongole(){
+
+            alert("😋 Spaghete cu scoici. Costul este de 25 RON portia.");
+    }
+
+    function Amatriciana(){
+
+            alert("😋 Spaghete all' Amatriciana. Costul este de 25 RON portia.");
+    }
+
+    function Pomodoro(){
+
+            alert("😋 Spaghete cu sos de rosii si branza rasa pe deasupra. Costul este de 25 RON portia.");
+    }
+    function Lasagna(){
+
+            alert("😋 Lasagna cu sos de porc mistret. Costul este de 25 RON portia.");
+    }
+
+    function Formaggi(){
+
+            alert("😋 Pizza quattro formaggi. Costul este de 45 RON.");
+    }
+
+    function Ceapa(){
+
+            alert("😋 Pizza alla boscaiola: mozzarella, ciuperci, spanac si ceapa. Costul este de 45 RON.");
+    }
+
+    function Capsuni(){
+
+            alert("😋 Pizza de vara: mozzarella, crema de branza, capsuni, fistic si busuioc. Costul este de 45 RON.");
+    }
+
+    function Rucola(){
+
+            alert("😋 Pizza rucola, grana si bresaola. Costul este de 45 RON.");
+    }
+
+    function Avocado(){
+
+            alert("Timpul pentru ton 😋 Ingrediente: paine, castraveti, ton, rosii, ceapa rosie, capere, ou, salata verde. Costul este de 25 RON.");
+    }
+
+    function Bacon(){
+
+            alert("😋 Burger de vita, ou, branza si sunca, bine cuibarite intr-o chifla prajita la interior. Costul este de 45 RON.");
+    }
+
+    function Club(){
+
+            alert("😋 Club Sandwich: burger de vita, ou, branza, sunca, rosii, salata verde, morcov si cartofi prajiti. Costul este de 45 RON.");
+    }
+
+    function Cheese(){
+
+            alert("😋 Cheeseburger: dublu burger de vita, branza in cascada, sunca, castraveti in saramura, totul intr-o chifla din faina integrala prajita. Costul este de 45 RON.");
+    }
+    function Falafel(){
+
+            alert("😋 Falafel, salata de avocado, rosii uscate, ardei gras, se odihnesc intr-o chifla de faina de secara. Costul este de 45 RON.");
+    }
+
+    function Spaniola(){
+
+            document.getElementById("brioche").onclick = ButonS;
+            document.getElementById("zmeura").onclick = ZmeuraS;
+            document.getElementById("melcisori").onclick = MelcisoriS;
+            document.getElementById("stafide").onclick = StafideS;
+            document.getElementById("cupcakes").onclick = CupcakesS;
+            document.getElementById("cioco").onclick = CiocoS;
+            document.getElementById("clatite").onclick = ClatiteS;
+            document.getElementById("clasic").onclick = ClasicS;
+            document.getElementById("sarat").onclick = SaratS;
+            document.getElementById("somon").onclick = SomonS;
+            document.getElementById("prajit").onclick = PrajitS;
+            document.getElementById("avocado").onclick = AvocadoS;
+            document.getElementById("ridichi").onclick = RidichiS;
+            document.getElementById("ciuperci").onclick = CiuperciS;
+            document.getElementById("ragu").onclick = RaguS;
+            document.getElementById("vongole").onclick = VongoleS;
+            document.getElementById("amatriciana").onclick = AmatricianaS;
+            document.getElementById("pomodoro").onclick = PomodoroS;
+            document.getElementById("lasagna").onclick = LasagnaS;
+            document.getElementById("formaggi").onclick = FormaggiS;
+            document.getElementById("ceapa").onclick = CeapaS;
+            document.getElementById("capsuni").onclick = CapsuniS;
+            document.getElementById("rucola").onclick = RucolaS;
+            document.getElementById("bacon").onclick = BaconS;
+            document.getElementById("club").onclick = ClubS;
+            document.getElementById("cheese").onclick = CheeseS;
+            document.getElementById("falafel").onclick = FalafelS;
+
+            document.getElementById("photos").innerHTML = "&#9733; Todos los derechos sobre las fotos están reservados a sus autores (copyright)!";
+
+            limba = "esp";
+
+    }
+    function ButonS(){
+
+            alert("Brioche 😋 Ingredientes: harina, agua, huevos, azúcar en polvo. El costo es de 1,50 € cada uno.");
+    }
+    
+    function ZmeuraS(){
+        
+            alert("Brioche 😋 Ingredientes: harina, agua, huevos, crema de vainilla, frambuesas, moras, melocotones, azúcar glass. El costo es de 1,50 € cada uno.");
+    }
+
+    function MelcisoriS(){
+        
+            alert("Brioche 😋 Ingredientes: harina, agua, huevos, miel, nueces. El costo es de 1,50 € cada uno.");
+    }
+
+    function StafideS(){
+        
+            alert("Brioche 😋 Ingredientes: harina, leche, huevos, azúcar, pasas, crema de vainilla, glaseado de azúcar y limón. El costo es de 1,50 € cada uno.");
+    }
+
+    function CupcakesS(){
+        
+            alert("Cupcake 😋 Ingredientes: harina, leche, huevos, mantequilla, azúcar, vainilla, frutos del bosque. El costo es de 2 € cada uno.");
+    }
+
+    function CiocoS(){
+        
+            alert("Cupcake 😋 Ingredientes: harina, leche, huevos, mantequilla, azúcar, cacao, copos de chocolate. El costo es de 2 € cada uno.");
+    }
+
+    function ClatiteS(){
+        
+            alert("American Pancakes 😋 Ingredientes: harina, leche, huevos, azúcar, decoración de arándanos, moras y sirope de arce. El costo es de 1 € cada uno.");
+    }
+
+    function ClasicS(){
+        
+            alert("Panqueque 😋 Ingredientes: harina, leche, huevos, azúcar, relleno de mermelada de fresa o chocolate. El costo es de 1 € por 2 piezas.");
+    }
+
+    function SaratS(){
+        
+            alert("Brioche Salado 😋 Ingredientes para croissant: harina, leche, huevos, relleno de jamón, queso y ensalada. El costo es de 3 € cada uno.");
+    }
+
+    function SomonS(){
+        
+            alert("Descanso de Salmón 😋 Ingredientes: tostadas, queso crema con eneldo, salmón, alcaparras. El costo es de 3 € cada uno.");
+    }
+
+    function PrajitS(){
+        
+            alert("Fantasía 😋 Ingredientes: tostadas, ensalada, aguacate, salmón, huevo. El costo es de 5 € por ración.");
+    }
+
+    function RidichiS(){
+        
+            alert("Ensalada 😋 Ingredientes: tostada, ensalada, rábano, queso, pechuga de pollo. El costo es de 5 € por ración.");
+    }
+
+    function CiuperciS(){
+        
+            alert("Ensalada de Champiñones 😋 Ingredientes: champiñones, lechuga, queso rallado. El costo es de 5 € por ración.");
+    }
+
+    function RaguS(){
+        
+            alert("😋 Pasta con salsa de carne y queso rallado por encima. El costo es de 5 € por ración.");
+    }
+
+    function VongoleS(){
+        
+            alert("😋 Espaguetis a las almejas. El costo es de 5 € por ración.");
+    }
+
+    function AmatricianaS(){
+        
+            alert("😋 Espaguetis all' Amatriciana. El costo es de 5 € por ración.");
+    }
+
+    function PomodoroS(){
+        
+            alert("😋 Espaguetis con salsa de tomate y queso rallado por encima. El costo es de 5 € por ración.");
+    }   
+
+    function LasagnaS(){
+        
+            alert("😋 Lasaña con salsa de jabalí. El costo es de 5 € por ración.");
+    }   
+
+    function FormaggiS(){
+        
+            alert("😋 Pizza quattro formaggi. El costo es de 9 €.");
+    }   
+
+    function CeapaS(){
+        
+            alert("😋 Pizza de leñador: mozzarella, champiñones, espinacas y cebolla. El costo es de 9 €.");
+    }   
+
+    function CapsuniS(){
+        
+            alert("😋 Pizza de verano: mozzarella, queso crema, fresas, pistachos y albahaca. El costo es de 9 €.");
+    }   
+
+    function RucolaS(){
+        
+            alert("😋 Pizza de rúcula, grana y bresaola. El costo es de 9 €.");
+    }   
+
+    function AvocadoS(){
+        
+            alert("Tiempo de Atún 😋 Ingredientes: pan, pepinos, atún, tomates, cebolla morada, alcaparras, huevo, lechuga. El costo es de 5 €.");
+    }
+
+    function BaconS(){
+        
+            alert("😋 Hamburguesa de ternera, huevo, queso y panceta, bien anidada en un panecillo tostado por dentro. El costo es de 9 €.");
+    }   
+
+    function ClubS(){
+        
+            alert("😋 Club Sandwich: hamburguesa de ternera, huevo, queso, panceta, tomate, lechuga, zanahoria y patatas fritas. El costo es de 9 €.");
+    }   
+
+    function CheeseS(){
+        
+            alert("😋 Hamburguesa con queso: hamburguesa doble de ternera, queso en cascada, panceta, pepinos encurtidos, todo en un pan integral tostado. El costo es de 9 €.");
+    }   
+
+    function FalafelS(){
+        
+            alert("😋 Falafel, ensalada de aguacate, tomates secos, pimientos morrones, reposar en un panecillo de harina de centeno. El costo es de 9 €.");
+    } 
+
+    function Portugheza(){
+
+            document.getElementById("brioche").onclick = ButonP;
+            document.getElementById("zmeura").onclick = ZmeuraP;
+            document.getElementById("melcisori").onclick = MelcisoriP;
+            document.getElementById("stafide").onclick = StafideP;
+            document.getElementById("cupcakes").onclick = CupcakesP;
+            document.getElementById("cioco").onclick = CiocoP;
+            document.getElementById("clatite").onclick = ClatiteP;
+            document.getElementById("clasic").onclick = ClasicP;
+            document.getElementById("sarat").onclick = SaratP;
+            document.getElementById("somon").onclick = SomonP;
+            document.getElementById("prajit").onclick = PrajitP;
+            document.getElementById("avocado").onclick = AvocadoP;
+            document.getElementById("ridichi").onclick = RidichiP;
+            document.getElementById("ciuperci").onclick = CiuperciP;
+            document.getElementById("ragu").onclick = RaguP;
+            document.getElementById("vongole").onclick = VongoleP;
+            document.getElementById("amatriciana").onclick = AmatricianaP;
+            document.getElementById("pomodoro").onclick = PomodoroP;
+            document.getElementById("lasagna").onclick = LasagnaP;
+            document.getElementById("formaggi").onclick = FormaggiP;
+            document.getElementById("ceapa").onclick = CeapaP;
+            document.getElementById("capsuni").onclick = CapsuniP;
+            document.getElementById("rucola").onclick = RucolaP;
+            document.getElementById("bacon").onclick = BaconP;
+            document.getElementById("club").onclick = ClubP;
+            document.getElementById("cheese").onclick = CheeseP;
+            document.getElementById("falafel").onclick = FalafelP;
+
+            document.getElementById("photos").innerHTML ="&#9733; Todos os direitos sobre as fotos são reservados aos seus autores (copyright)!";
+
+            limba = "pt";
+    }
+
+    function ButonP(){
+
+            alert("Brioche 😋 Ingredientes: farinha, água, ovos, açúcar de confeiteiro. O custo é de 1,50 € cada.");
+    }
+
+    function ZmeuraP(){
+
+            alert("Brioche 😋 Ingredientes: farinha, água, ovos, creme de baunilha, framboesas, amoras, pêssegos, açúcar de confeiteiro. O custo é de 1,50 € cada.");
+    }
+
+    function MelcisoriP(){
+
+            alert("Brioche 😋 Ingredientes: farinha, água, ovos, mel, nozes. O custo é de 1,50 € cada.");
+    }
+
+    function StafideP(){
+
+            alert("Brioche 😋 Ingredientes: farinha, leite, ovos, açúcar, passas, creme de baunilha, açúcar de confeiteiro e limão. O custo é de 1,50 € cada.");
+    }   
+
+    function CupcakesP(){
+
+            alert("Cupcake 😋 Ingredientes: farinha, leite, ovos, manteiga, açúcar, baunilha, frutas vermelhas. O custo é de 2 € cada.");
+    }   
+
+    function CiocoP(){
+
+            alert("Cupcake 😋 Ingredientes: farinha, leite, ovos, manteiga, açúcar, cacau, flocos de chocolate. O custo é de 2 € cada.");
+    }   
+      
+    function ClatiteP(){
+
+            alert("American Panqueca 😋 Ingredientes: farinha, leite, ovos, açúcar, decoração de mirtilo, amoras e xarope de bordo. O custo é de 1 € cada.");
+    }   
+
+    function ClasicP(){
+
+            alert("Panqueca 😋 Ingredientes: farinha, leite, ovos, açúcar, recheado com geléia de morango ou chocolate. O custo é de 1 € por 2 peças.");
+    }   
+
+    function SaratP(){
+
+            alert("Brioche Salgado 😋 Ingredientes para croissant: farinha, leite, ovos, recheio de fiambre, queijo e salada. O custo é de 3 € cada.");
+    }   
+
+    function SomonP(){
+
+            alert("Pausa de Salmão 😋 Ingredientes: torradas, cream cheese com endro, salmão, alcaparras. O custo é de 3 € cada.");
+    }   
+    
+    function PrajitP(){
+
+            alert("Fantasia 😋 Ingredientes: torradas, salada, abacate, salmão, ovo. O custo é de 5 € por porção.");
+    }   
+
+    function RidichiP(){
+
+            alert("Salada 😋 Ingredientes: torradas, salada, rabanete, queijo, peito de frango. O custo é de 5 € por porção.");
+    }  
+
+    function CiuperciP(){
+
+            alert("Salada de Cogumelos 😋 Ingredientes: cogumelos, alface, queijo ralado. O custo é de 5 € por porção.");
+    }  
+
+    function RaguP(){
+
+            alert("😋 Macarrão com molho de carne e queijo ralado por cima. O custo é de 5 € por porção.");
+    }  
+
+    function VongoleP(){
+
+            alert("😋 Esparguete com amêijoas. O custo é de 5 € por porção.");
+    }  
+
+    function AmatricianaP(){
+
+            alert("😋 Esparguete all' Amatriciana. O custo é de 5 € por porção.");
+    } 
+
+    function PomodoroP(){
+
+            alert("😋 Espaguete com molho de tomate e queijo ralado por cima. O custo é de 5 € por porção.");
+    } 
+
+    function LasagnaP(){
+
+            alert("😋 Lasanha com molho de javali. O custo é de 5 € por porção.");
+    }   
+
+    function FormaggiP(){
+
+            alert("😋 Pizza quattro formaggi. O custo é de 9 €.");
+    }   
+
+    function CeapaP(){
+
+            alert("😋 Pizza de lenhador: mussarela, cogumelos, espinafre e cebola. O custo é de 9 €.");
+    }   
+
+    function CapsuniP(){
+
+            alert("😋 Pizza de verão: mussarela, cream cheese, morango, pistache e manjericão. O custo é de 9 €.");
+    }   
+
+    function RucolaP(){
+
+            alert("😋 Pizza de rúcula, grana e bresaola. O custo é de 9 €.");
+    }   
+
+    function AvocadoP(){
+
+            alert("Hora do Atum 😋 Ingredientes: pão, pepinos, atum, tomates, cebola roxa, alcaparras, ovo, alface. O custo é de 5 €.");
+    }   
+
+    function BaconP(){
+
+            alert("😋 Hambúrguer de carne, ovo, queijo e bacon bem aninhado num pão torrado no interior. O custo é de 9 €.");
+    }   
+
+    function ClubP(){
+
+            alert("😋 Sanduíche Club: hambúrguer de carne, ovo, queijo, bacon, tomate, alface, cenoura e batata frita. O custo é de 9 €.");
+    }   
+
+    function CheeseP(){
+
+            alert("😋 Cheeseburger: hambúrguer duplo de carne, queijo em cascata, bacon, pepino em conserva, tudo em um pão integral torrado. O custo é de 9 €.");
+    }   
+
+    function FalafelP(){
+
+            alert("😋 Falafel, salada de abacate, tomate seco, pimentão, descanse em um pão de farinha de centeio. O custo é de 9 €.");
+    }   
+
+</script>
+
+</head>
+<body>
+    <h1 id="emoji">Yummy &#128523;</h1>
+
+    <nav>
+        <ul>
+            <a href=""><li>Lang</li></a>
+            <a href="index.html"><li>Home</li></a>
+            <a href="menu.html"><li>Location</li></a>
+            <a href="pagina.html"><li>Drink</li></a>
+        </ul>
+    </nav>
+
+    <nav>
+            <div class="logo">
+                <a href="#"><div class="lang-menu"></a>
+                <!--In functie de tara unde ma aflu, se selecteaza automat limba-->
+                   <div class="selected-lang"><span style='font-size:30px;'>&#128072;</span>
+                    </div>
+                        <ul>
+                            <li>
+                                <a href ="#" class="de" onclick="German()"> Deutsch</a>
+                            </li>
+        
+                            <li>
+                                <a href ="#" class="us" onclick="English()">English</a>
+                            </li>
+        
+                            <li>
+                                <a href ="#" class="fr" onclick="French()" > Français</a>
+                            </li>
+                            <li>
+                                <a href ="#" class="it" onclick="Italian()" >Italiano</a>
+                            </li>
+        
+                            <li>
+                                <a href ="#" class="ro" onclick="Romana()" >Romana</a>
+                            </li>
+        
+                            <li>
+                            <a href="#" class="es" onclick="Spaniola()">Español</a>
+                            </li>
+        
+                            <li>
+                            <a href="#" class="pt" onclick="Portugheza()">Português</a>
+                            </li>      
+                        </ul>
+            </div>
+    </nav>
+
+
+    <section class="food">
+
+        <div class="yummy">
+            <img  src="https://cdn.pixabay.com/photo/2021/01/16/21/05/brioche-5923399__480.jpg" alt="brioche" >
+                <button class="info" id="brioche" onclick="Buton()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://cdn.pixabay.com/photo/2019/12/15/17/25/passion-4697649__480.jpg" alt="brioche">
+                <button class="info" id="zmeura" onclick="Zmeura()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://cdn.pixabay.com/photo/2021/04/14/18/16/brioche-6179129__480.jpg" alt="brioche">
+                <button class="info" id="melcisori" onclick="Melcisori()"><span>&#128073;</span>Info</button>
+        </div>
+    
+        <div class="yummy">
+            <img src="https://cdn.pixabay.com/photo/2018/09/08/10/05/coffee-3662211__480.jpg">
+                <button class="info" id="stafide" onclick="Stafide()"><span>&#128073;</span>Info</button>
+        </div>
+    
+        <div class="yummy">
+            <img src="https://cdn.pixabay.com/photo/2017/09/14/14/33/cupcake-2749204__340.jpg">
+                <button class="info" id="cupcakes" onclick="Cupcakes()"><span>&#128073;</span>Info</button>
+        </div>
+    
+        <div class="yummy">
+            <img src="https://cdn.pixabay.com/photo/2020/05/01/09/13/cupcakes-5116009__340.jpg">
+                <button class="info" id="cioco" onclick="Cioco()"><span>&#128073;</span>Info</button>
+        </div>
+        
+        <div class="yummy">
+            <img src="https://images.pexels.com/photos/3780469/pexels-photo-3780469.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500">
+                <button class="info" id="clatite" onclick="Clatite()"><span>&#128073;</span>Info</button>
+        </div>
+    
+        <div class="yummy">
+            <img src="https://cdn.pixabay.com/photo/2017/01/30/13/49/pancakes-2020863__340.jpg">
+                <button class="info" id="clasic" onclick="Clasic()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://images.pexels.com/photos/7390/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&w=500">
+                <button class="info" id="sarat" onclick="Sarat()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://images.pexels.com/photos/4042993/pexels-photo-4042993.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500">
+                <button class="info" id="somon" onclick="Somon()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://images.pexels.com/photos/8765340/pexels-photo-8765340.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500">
+                <button class="info" id="prajit" onclick="Prajit()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://images.pexels.com/photos/4552109/pexels-photo-4552109.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500">
+                <button class="info" id="ridichi" onclick="Ridichi()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://images.pexels.com/photos/942417/pexels-photo-942417.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500">
+                <button class="info" id="ciuperci" onclick="Ciuperci()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://images.pexels.com/photos/5807019/pexels-photo-5807019.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500">
+                <button class="info" id="ragu" onclick="Ragu()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://cdn.pixabay.com/photo/2017/09/17/10/00/food-2757966__480.jpg">
+                <button class="info" id="vongole" onclick="Vongole()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://cdn.pixabay.com/photo/2018/02/13/15/05/pasta-3150916__480.jpg">
+                <button class="info" id="amatriciana" onclick="Amatriciana()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://cdn.pixabay.com/photo/2017/08/24/11/35/pasta-2676444__480.jpg">
+                <button class="info" id="pomodoro" onclick="Pomodoro()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://cdn.pixabay.com/photo/2021/02/06/11/51/food-5987888__480.jpg">
+                <button class="info" id="lasagna" onclick="Lasagna()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://cdn.pixabay.com/photo/2020/06/17/21/46/pizza-5311269__480.jpg">
+                <button class="info" id="formaggi" onclick="Formaggi()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://cdn.pixabay.com/photo/2015/04/03/19/02/pizza-705680__480.jpg">
+                <button class="info" id="ceapa" onclick="Ceapa()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://images.pexels.com/photos/1260968/pexels-photo-1260968.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500">
+                <button class="info" id="capsuni" onclick="Capsuni()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://images.pexels.com/photos/5903165/pexels-photo-5903165.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500">
+                <button class="info" id="rucola" onclick="Rucola()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://img.kudika.ro/images/article_pictures/back/shutterstock_60010591.jpg">
+                <button class="info" id="avocado" onclick="Avocado()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://images.pexels.com/photos/6529912/pexels-photo-6529912.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
+                <button class="info" id="bacon" onclick="Bacon()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://images.pexels.com/photos/1600711/pexels-photo-1600711.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500">
+                <button class="info" id="club" onclick="Club()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://images.pexels.com/photos/3826273/pexels-photo-3826273.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500">
+                <button class="info" id="cheese" onclick="Cheese()"><span>&#128073;</span>Info</button>
+        </div>
+
+        <div class="yummy">
+            <img src="https://images.pexels.com/photos/6546024/pexels-photo-6546024.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
+                <button class="info" id="falafel" onclick="Falafel()"><span>&#128073;</span>Info</button>
+        </div>
+
+        
+    </section>
+    
+    <h4 id="photos">&#9733; Toate drepturile asupra fotografiilor sunt rezervate autorilor de drept (copyright)!</h4>
+
+    <script>
+        Search();
+        getLocaleLanguage();
+    </script>
+
+</body>
+</html>
